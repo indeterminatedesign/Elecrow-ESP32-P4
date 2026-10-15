@@ -33,8 +33,8 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     // 2. MASTER VISIBLE CONTAINER (Restricts UI to your viewable area)
     // ##############################################################
     _visibleContainer = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(_visibleContainer, 1024, 480);      // <-- CHANGE: Set to your actual visible width & height
-    lv_obj_align(_visibleContainer, LV_ALIGN_CENTER, 0, 0); // Centers X and Y
+    lv_obj_set_size(_visibleContainer, 1010, 480);      // <-- CHANGE: Set to your actual visible width & height
+    lv_obj_align(_visibleContainer, LV_ALIGN_CENTER, 5, 20); // Centers X and Y
     lv_obj_clear_flag(_visibleContainer, LV_OBJ_FLAG_SCROLLABLE); // Disable scrollbars/overflow
     
     // Style the master container to be invisible/transparent
