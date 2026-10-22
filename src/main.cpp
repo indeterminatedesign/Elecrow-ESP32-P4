@@ -48,10 +48,6 @@ Board *board = nullptr;
 SemaphoreHandle_t shadowBufferMutex = NULL;
 TaskHandle_t renderTaskHandle = NULL;
 
-lv_obj_t *rpmLabel;
-lv_obj_t *mapLabel;
-lv_obj_t *fuelLabel;
-
 void canRecieveTask(void *param)
 {
     while (true)
@@ -105,8 +101,8 @@ void renderDashboardTask(void *param)
         {
             if (xSemaphoreTake(shadowBufferMutex, pdMS_TO_TICKS(0)) == pdTRUE)
             {
-                // Memory block copy into the buffer your UI is holding a pointer to
-                vehicleDataUIBuffer = vehicleDataShadowBuffer;
+                // Update telemetry without overwriting the UI's change-detection baselines.
+                vehicleDataUIBuffer.updateValuesFrom(vehicleDataShadowBuffer);
                 xSemaphoreGive(shadowBufferMutex);
             }
         }

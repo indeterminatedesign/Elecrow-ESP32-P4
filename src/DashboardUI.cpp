@@ -8,9 +8,10 @@ extern "C"
     LV_IMG_DECLARE(TurnSignalRight);
     LV_IMG_DECLARE(TurnSignalLeft);
     LV_IMG_DECLARE(VWLogo);
-    LV_FONT_DECLARE(B612_Mono_170);
-    LV_FONT_DECLARE(B612_Mono_15);
-    LV_FONT_DECLARE(B612_Mono_30);
+    LV_FONT_DECLARE(Michroma_15);
+    LV_FONT_DECLARE(Michroma_20);
+    LV_FONT_DECLARE(Michroma_30);
+    LV_FONT_DECLARE(Michroma_165);
 }
 
 void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData)
@@ -33,10 +34,10 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     // 2. MASTER VISIBLE CONTAINER (Restricts UI to your viewable area)
     // ##############################################################
     _visibleContainer = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(_visibleContainer, 1010, 480);      // <-- CHANGE: Set to your actual visible width & height
-    lv_obj_align(_visibleContainer, LV_ALIGN_CENTER, 5, 20); // Centers X and Y
+    lv_obj_set_size(_visibleContainer, 1010, 480);                // <-- CHANGE: Set to your actual visible width & height
+    lv_obj_align(_visibleContainer, LV_ALIGN_CENTER, 5, 20);      // Centers X and Y
     lv_obj_clear_flag(_visibleContainer, LV_OBJ_FLAG_SCROLLABLE); // Disable scrollbars/overflow
-    
+
     // Style the master container to be invisible/transparent
     lv_obj_set_style_bg_opa(_visibleContainer, 0, 0);
     lv_obj_set_style_border_width(_visibleContainer, 0, 0);
@@ -45,7 +46,7 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     // Images (Parented to _visibleContainer instead of lv_scr_act())
     vwLogoImg = lv_img_create(_visibleContainer);
     lv_img_set_src(vwLogoImg, &VWLogo);
-    lv_obj_align(vwLogoImg, LV_ALIGN_TOP_LEFT, 7, 7);
+    lv_obj_align(vwLogoImg, LV_ALIGN_TOP_LEFT, 40, 7);
 
     tachometerImg = lv_img_create(_visibleContainer);
     lv_img_set_src(tachometerImg, &Tachometer);
@@ -79,7 +80,7 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     lv_style_init(&style_bg_RPM);
     lv_style_set_border_color(&style_bg_RPM, lv_color_make(255, 255, 255));
     lv_style_set_border_width(&style_bg_RPM, 2);
-    lv_style_set_pad_all(&style_bg_RPM, 4); 
+    lv_style_set_pad_all(&style_bg_RPM, 4);
     lv_style_init(&style_indic_RPM);
     lv_style_set_bg_opa(&style_indic_RPM, LV_OPA_COVER);
     lv_style_set_bg_color(&style_indic_RPM, lv_color_white());
@@ -90,17 +91,17 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     // Style definitions for labels
     // ##############################################################
     lv_style_init(&style_Labels);
-    lv_style_set_text_font(&style_Labels, &B612_Mono_15);
+    lv_style_set_text_font(&style_Labels, &Michroma_15);
     lv_style_set_text_color(&style_Labels, lv_color_white());
     lv_style_set_text_align(&style_Labels, LV_TEXT_ALIGN_CENTER);
 
     lv_style_init(&style_ValueLabels);
-    lv_style_set_text_font(&style_ValueLabels, &B612_Mono_30);
+    lv_style_set_text_font(&style_ValueLabels, &Michroma_30);
     lv_style_set_text_color(&style_ValueLabels, lv_color_white());
     lv_style_set_text_align(&style_ValueLabels, LV_TEXT_ALIGN_CENTER);
 
     lv_style_init(&style_Speed);
-    lv_style_set_text_font(&style_Speed, &B612_Mono_170);
+    lv_style_set_text_font(&style_Speed, &Michroma_165);
     lv_style_set_text_color(&style_Speed, lv_color_white());
     lv_style_set_text_align(&style_Speed, LV_TEXT_ALIGN_CENTER);
     // ##############################################################
@@ -110,7 +111,7 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
 
     // Speed Container Parent
     lv_obj_t *dataCont = lv_obj_create(_visibleContainer);
-    lv_obj_set_size(dataCont, 260, 240); 
+    lv_obj_set_size(dataCont, 260, 240);
     lv_obj_set_flex_flow(dataCont, LV_FLEX_FLOW_COLUMN);
     lv_obj_align(dataCont, LV_ALIGN_TOP_MID, 0, 120);
 
@@ -121,12 +122,12 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
 
     // Speed box
     lv_obj_t *box = lv_obj_create(dataCont);
-    lv_obj_set_size(box, lv_pct(100), 240); 
+    lv_obj_set_size(box, lv_pct(100), 240);
     lv_obj_set_flex_flow(box, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_style_bg_color(box, LV_COLOR_MAKE(0, 3, 91), 0);
-    lv_obj_set_style_pad_all(box, 10, 0); 
-    lv_obj_set_style_pad_row(box, 25, 0); 
-    lv_obj_set_style_radius(box, 10, 0);  
+    lv_obj_set_style_pad_all(box, 10, 0);
+    lv_obj_set_style_pad_row(box, 25, 0);
+    lv_obj_set_style_radius(box, 10, 0);
 
     lv_obj_t *l = lv_label_create(box);
     lv_obj_add_style(l, &style_Labels, 0);
@@ -136,17 +137,17 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     _speedValueLabel = lv_label_create(box);
     lv_obj_add_style(_speedValueLabel, &style_Speed, 0);
     lv_obj_set_width(_speedValueLabel, lv_pct(100));
-    lv_label_set_text(_speedValueLabel,""); 
+    lv_label_set_text(_speedValueLabel, "");
 
     fuelImg = lv_img_create(_visibleContainer);
     lv_img_set_src(fuelImg, &Fuel);
-    lv_obj_align(fuelImg, LV_ALIGN_BOTTOM_MID, 120, -10);
+    lv_obj_align(fuelImg, LV_ALIGN_BOTTOM_MID, 120, -8);
 
     // Fuel Bar
     static lv_style_t style_bg;
     static lv_style_t style_indic;
     fuelBar = lv_bar_create(_visibleContainer);
-    lv_obj_set_size(fuelBar, 180, 25);
+    lv_obj_set_size(fuelBar, 180, 30);
     lv_obj_align(fuelBar, LV_ALIGN_BOTTOM_MID, 0, -15);
     lv_obj_set_style_radius(fuelBar, 0, LV_PART_MAIN);
     lv_obj_set_style_radius(fuelBar, 0, LV_PART_INDICATOR);
@@ -161,7 +162,7 @@ void DashboardUI::begin(esp_panel::board::Board *board, VehicleData *vehicleData
     lv_style_set_bg_color(&style_indic, lv_color_white());
     lv_obj_add_style(fuelBar, &style_bg, LV_PART_MAIN);
     lv_obj_add_style(fuelBar, &style_indic, LV_PART_INDICATOR);
-    
+
     lvgl_port_unlock();
 }
 
@@ -169,7 +170,7 @@ void DashboardUI::LeftCells()
 {
     // Parented to _visibleContainer
     lv_obj_t *dataCont = lv_obj_create(_visibleContainer);
-    lv_obj_set_size(dataCont, 180, LV_SIZE_CONTENT); 
+    lv_obj_set_size(dataCont, 180, LV_SIZE_CONTENT);
     lv_obj_set_flex_flow(dataCont, LV_FLEX_FLOW_COLUMN);
     lv_obj_align(dataCont, LV_ALIGN_TOP_LEFT, 20, 120);
 
@@ -178,37 +179,16 @@ void DashboardUI::LeftCells()
     lv_obj_set_style_pad_all(dataCont, 0, 0);
     lv_obj_set_style_pad_row(dataCont, 15, 0);
 
-    auto create_cell = [&](const char *title, lv_obj_t **val_label)
-    {
-        lv_obj_t *box = lv_obj_create(dataCont);
-        lv_obj_set_size(box, lv_pct(100), LV_SIZE_CONTENT); 
-        lv_obj_set_flex_flow(box, LV_FLEX_FLOW_COLUMN);
-        lv_obj_set_style_bg_opa(box, 0, 0);
-        lv_obj_set_style_pad_all(box, 10, 0); 
-        lv_obj_set_style_pad_row(box, 2, 0);  
-        lv_obj_set_style_radius(box, 10, 0);  
-
-        lv_obj_t *l = lv_label_create(box);
-        lv_obj_add_style(l, &style_Labels, 0);
-        lv_obj_set_width(l, lv_pct(100));
-        lv_label_set_text(l, title);
-
-        *val_label = lv_label_create(box);
-        lv_obj_add_style(*val_label, &style_ValueLabels, 0);
-        lv_obj_set_width(*val_label, lv_pct(100));
-        lv_label_set_text(*val_label, "--"); 
-    };
-
-    create_cell("Coolant(F)", &_coolantValueLabel);
-    create_cell("IAT (F)", &_matValueLabel);
-    create_cell("Battery(V)", &_batteryValueLabel);
+    createCell(dataCont, "Coolant(F)", &_coolantValueLabel, &_coolantCell);
+    createCell(dataCont, "IAT (F)", &_matValueLabel, &_matCell);
+    createCell(dataCont, "Battery(V)", &_batteryValueLabel, &_batteryCell);
 }
 
 void DashboardUI::RightCells()
 {
     // Parented to _visibleContainer
     lv_obj_t *dataCont = lv_obj_create(_visibleContainer);
-    lv_obj_set_size(dataCont, 180, LV_SIZE_CONTENT); 
+    lv_obj_set_size(dataCont, 180, LV_SIZE_CONTENT);
     lv_obj_set_flex_flow(dataCont, LV_FLEX_FLOW_COLUMN);
     lv_obj_align(dataCont, LV_ALIGN_TOP_RIGHT, -20, 120);
 
@@ -217,96 +197,164 @@ void DashboardUI::RightCells()
     lv_obj_set_style_pad_all(dataCont, 0, 0);
     lv_obj_set_style_pad_row(dataCont, 15, 0);
 
-    auto create_cell = [&](const char *title, lv_obj_t **val_label)
-    {
-        lv_obj_t *box = lv_obj_create(dataCont);
-        lv_obj_set_size(box, lv_pct(100), LV_SIZE_CONTENT); 
-        lv_obj_set_flex_flow(box, LV_FLEX_FLOW_COLUMN);
-        lv_obj_set_style_bg_opa(box, 0, 0);
-        lv_obj_set_style_pad_all(box, 10, 0); 
-        lv_obj_set_style_pad_row(box, 2, 0);  
-        lv_obj_set_style_radius(box, 10, 0);  
+    createCell(dataCont, "RPM", &_rpmValueLabel, &_rpmCell);
+    createCell(dataCont, "MAP (kPa)", &_mapValueLabel, &_mapCell);
+    createCell(dataCont, "AFR", &_afrValueLabel, &_afrCell);
+}
 
-        lv_obj_t *l = lv_label_create(box);
-        lv_obj_add_style(l, &style_Labels, 0);
-        lv_obj_set_width(l, lv_pct(100));
-        lv_label_set_text(l, title);
+void DashboardUI::createCell(lv_obj_t *parent, const char *title, lv_obj_t **val_label, lv_obj_t **box_container)
+{
+    // Create the background bounding box inside the target layout container
+    lv_obj_t *box = lv_obj_create(parent);
+    lv_obj_set_size(box, lv_pct(100), LV_SIZE_CONTENT);
+    lv_obj_set_flex_flow(box, LV_FLEX_FLOW_COLUMN);
 
-        *val_label = lv_label_create(box);
-        lv_obj_add_style(*val_label, &style_ValueLabels, 0);
-        lv_obj_set_width(*val_label, lv_pct(100));
-        lv_label_set_text(*val_label, "--"); 
-    };
+    // Default to transparent so your background color switches work properly
+    lv_obj_set_style_bg_opa(box, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_pad_all(box, 10, 0);
+    lv_obj_set_style_pad_row(box, 2, 0);
+    lv_obj_set_style_radius(box, 10, 0);
 
-    create_cell("RPM", &_rpmValueLabel);
-    create_cell("MAP (kPa)", &_mapValueLabel);
-    create_cell("AFR", &_afrValueLabel);
+    // Title label (Coolant, Oil Temp, etc.)
+    lv_obj_t *title_lbl = lv_label_create(box);
+    lv_obj_add_style(title_lbl, &style_Labels, 0);
+    lv_obj_set_width(title_lbl, lv_pct(100));
+    lv_label_set_text(title_lbl, title);
+
+    // Dynamic numeric value label
+    *val_label = lv_label_create(box);
+    lv_obj_add_style(*val_label, &style_ValueLabels, 0);
+    lv_obj_set_width(*val_label, lv_pct(100));
+    lv_label_set_text(*val_label, "--");
+
+    // Pass the box reference back to the class pointer for structural style updates
+    *box_container = box;
 }
 
 void DashboardUI::render()
 {
 
-    VehicleData current = *_localVehicleData;
+    VehicleData &current = *_localVehicleData;
     char buf[32];
 
     lvgl_port_lock(-1);
 
-    if (abs(current.rpm.value - previousVehicleData.rpm.value) > current.rpm.uiUpdateTolerance)
+    if (current.rpm.hasChanged())
     {
         lv_label_set_text_fmt(_rpmValueLabel, "%d", (int)current.rpm.value);
         lv_bar_set_value(barRPM, current.rpm.value / 100, LV_ANIM_OFF);
-        previousVehicleData.rpm.value = current.rpm.value;
+
+        switch (current.rpm.thresholdState())
+        {
+        case CANDataFieldThreshold::NOMINAL:
+            lv_obj_set_style_bg_color(barRPM, lv_color_white(), LV_PART_INDICATOR);
+            break;
+        case CANDataFieldThreshold::ABOVE_THRESHOLD:
+            lv_obj_set_style_bg_color(barRPM, lv_color_make(255, 0, 0), LV_PART_INDICATOR);
+            break;
+        }
     }
 
-    if (abs(current.map.value - previousVehicleData.map.value) > current.map.uiUpdateTolerance)
+    if (current.map.hasChanged())
     {
         dtostrf(current.map.value, 0, 0, buf);
         lv_label_set_text_fmt(_mapValueLabel, "%s", buf);
-        previousVehicleData.map.value = current.map.value;
+
+        switch (current.map.thresholdState())
+        {
+        case CANDataFieldThreshold::NOMINAL:
+            lv_obj_set_style_bg_opa(_mapCell, LV_OPA_TRANSP, 0);
+            break;
+        case CANDataFieldThreshold::BELOW_THRESHOLD:
+            lv_obj_set_style_bg_opa(_mapCell, LV_OPA_COVER, 0);
+            lv_obj_set_style_bg_color(_mapCell, lv_color_make(0, 0, 255), 0);
+            break;
+        case CANDataFieldThreshold::ABOVE_THRESHOLD:
+            lv_obj_set_style_bg_opa(_mapCell, LV_OPA_COVER, 0);
+            lv_obj_set_style_bg_color(_mapCell, lv_color_make(255, 0, 0), 0);
+            break;
+        }
     }
 
-    if (abs(current.fuelLevel.value - previousVehicleData.fuelLevel.value) >= current.fuelLevel.uiUpdateTolerance)
+    if (current.fuelLevel.hasChanged())
     {
         uint8_t fuelLevel = map(current.fuelLevel.value, 0, 100, 0, 8); // Map fuel level to bar range
         lv_bar_set_value(fuelBar, fuelLevel, LV_ANIM_OFF);
-        previousVehicleData.fuelLevel.value = current.fuelLevel.value;
     }
 
-    if (abs(current.coolant.value - previousVehicleData.coolant.value) > current.coolant.uiUpdateTolerance)
+    if (current.coolant.hasChanged())
     {
         dtostrf((int)current.coolant.value, 0, 0, buf);
         lv_label_set_text_fmt(_coolantValueLabel, "%s", buf);
-        previousVehicleData.coolant.value = current.coolant.value;
+
+        switch (current.coolant.thresholdState())
+        {
+        case CANDataFieldThreshold::NOMINAL:
+            lv_obj_set_style_bg_opa(_coolantCell, LV_OPA_TRANSP, 0);
+            break;
+        case CANDataFieldThreshold::BELOW_THRESHOLD:
+            lv_obj_set_style_bg_opa(_coolantCell, LV_OPA_COVER, 0);
+            lv_obj_set_style_bg_color(_coolantCell, lv_color_make(0, 0, 255), 0);
+            break;
+        case CANDataFieldThreshold::ABOVE_THRESHOLD:
+            lv_obj_set_style_bg_opa(_coolantCell, LV_OPA_COVER, 0);
+            lv_obj_set_style_bg_color(_coolantCell, lv_color_make(255, 0, 0), 0);
+            break;
+        }
     }
 
-    if (abs(current.iat.value - previousVehicleData.iat.value) > current.iat.uiUpdateTolerance)
+    if (current.iat.hasChanged())
     {
         dtostrf((int)current.iat.value, 0, 0, buf);
         lv_label_set_text_fmt(_matValueLabel, "%s", buf);
-        previousVehicleData.iat.value = current.iat.value;
+
+        switch (current.iat.thresholdState())
+        {
+        case CANDataFieldThreshold::NOMINAL:
+            lv_obj_set_style_bg_opa(_matCell, LV_OPA_TRANSP, 0);
+            break;
+        case CANDataFieldThreshold::BELOW_THRESHOLD:
+            lv_obj_set_style_bg_opa(_matCell, LV_OPA_COVER, 0);
+            lv_obj_set_style_bg_color(_matCell, lv_color_make(0, 0, 255), 0);
+            break;
+        case CANDataFieldThreshold::ABOVE_THRESHOLD:
+            lv_obj_set_style_bg_opa(_matCell, LV_OPA_COVER, 0);
+            lv_obj_set_style_bg_color(_matCell, lv_color_make(255, 0, 0), 0);
+            break;
+        }
     }
 
-    if (abs(current.afr1.value - previousVehicleData.afr1.value) > current.afr1.uiUpdateTolerance)
+    if (current.afr1.hasChanged())
     {
-        dtostrf((int)current.afr1.value, 0, 1, buf);
+        dtostrf(current.afr1.value, 0, 1, buf);
         lv_label_set_text_fmt(_afrValueLabel, "%s", buf);
-        previousVehicleData.afr1.value = current.afr1.value;
     }
 
-    if (abs(current.battery.value - previousVehicleData.battery.value) > current.battery.uiUpdateTolerance)
+    if (current.battery.hasChanged())
     {
         dtostrf(current.battery.value, 0, 1, buf);
         lv_label_set_text_fmt(_batteryValueLabel, "%s", buf);
-        previousVehicleData.battery.value = current.battery.value;
+
+        switch (current.battery.thresholdState())
+        {
+        case CANDataFieldThreshold::NOMINAL:
+            lv_obj_set_style_bg_opa(_batteryCell, LV_OPA_TRANSP, 0);
+            break;
+        case CANDataFieldThreshold::BELOW_THRESHOLD:
+            lv_obj_set_style_bg_color(_batteryCell, lv_color_make(0, 0, 255), 0);
+            break;
+        case CANDataFieldThreshold::ABOVE_THRESHOLD:
+            lv_obj_set_style_bg_color(_batteryCell, lv_color_make(255, 0, 0), 0);
+            break;
+        }
     }
 
-    if (abs(current.speed.value - previousVehicleData.speed.value) > current.speed.uiUpdateTolerance)
+    if (current.speed.hasChanged())
     {
         lv_label_set_text_fmt(_speedValueLabel, "%d", (int)current.speed.value);
-        previousVehicleData.speed.value = current.speed.value;
     }
 
-    if (current.leftTurn.value != previousVehicleData.leftTurn.value)
+    if (current.leftTurn.hasChanged())
     {
         if (current.leftTurn.value == true)
         {
@@ -316,9 +364,9 @@ void DashboardUI::render()
         {
             lv_obj_add_flag(turnSignalLeftImg, LV_OBJ_FLAG_HIDDEN);
         }
-        previousVehicleData.leftTurn.value = current.leftTurn.value;
     }
-    if (current.rightTurn.value != previousVehicleData.rightTurn.value)
+
+    if (current.rightTurn.hasChanged())
     {
         if (current.rightTurn.value == true)
         {
@@ -328,11 +376,10 @@ void DashboardUI::render()
         {
             lv_obj_add_flag(turnSignalRightImg, LV_OBJ_FLAG_HIDDEN);
         }
-        previousVehicleData.rightTurn.value = current.rightTurn.value;
     }
 
     // Process the high beam indicator
-    if (current.highBeam.value != previousVehicleData.highBeam.value)
+    if (current.highBeam.hasChanged())
     {
         if (current.highBeam.value == true)
         {
@@ -342,7 +389,6 @@ void DashboardUI::render()
         {
             lv_obj_add_flag(highBeamImg, LV_OBJ_FLAG_HIDDEN);
         }
-        previousVehicleData.highBeam.value = current.highBeam.value;
     }
 
     lvgl_port_unlock();

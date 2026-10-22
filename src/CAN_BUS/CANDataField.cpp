@@ -1,4 +1,37 @@
 #include "CANDataField.h"
+#include <math.h>
+
+bool CANDataField::hasChanged()
+{
+    const float_t difference = fabsf(value - previousValue);
+    const bool changed = uiUpdateTolerance > 0.0f
+                             ? difference >= uiUpdateTolerance
+                             : difference > 0.0f;
+
+    if (changed)
+    {
+        previousValue = value; // Update previousValue to the current value
+        return true;
+    }
+
+    return false;
+}
+
+CANDataFieldThreshold CANDataField::thresholdState()
+{
+    if (highThreshold != NullThreshold && value > highThreshold)
+    {
+        return CANDataFieldThreshold::ABOVE_THRESHOLD;
+    }
+    else if (lowThreshold != NullThreshold && value < lowThreshold)
+    {
+        return CANDataFieldThreshold::BELOW_THRESHOLD;
+    }
+    else
+    {
+        return CANDataFieldThreshold::NOMINAL;
+    }
+}
 
 /**
  * @brief Decodes raw CAN data into the processed 'value' field.
@@ -46,25 +79,25 @@ void CANDataField::encode(uint8_t *data)
         // Boolean values generally do not use scale/bias
         data[offset] = (value != 0) ? 1 : 0;
         break;
-        
+
     case CANDataType::S16:
     {
         // Subtract bias first, then divide by scale
         int16_t raw = (int16_t)((value - sensorBias) / scale);
-        data[offset]     = (raw >> 8) & 0xFF; // High byte
-        data[offset + 1] = raw & 0xFF;        // Low byte
+        data[offset] = (raw >> 8) & 0xFF; // High byte
+        data[offset + 1] = raw & 0xFF;    // Low byte
         break;
     }
-    
+
     case CANDataType::U16:
     {
         // Subtract bias first, then divide by scale
         uint16_t raw = (uint16_t)((value - sensorBias) / scale);
-        data[offset]     = (raw >> 8) & 0xFF; // High byte
-        data[offset + 1] = raw & 0xFF;        // Low byte
+        data[offset] = (raw >> 8) & 0xFF; // High byte
+        data[offset + 1] = raw & 0xFF;    // Low byte
         break;
     }
-    
+
     case CANDataType::U8:
     {
         // Subtract bias first, then divide by scale

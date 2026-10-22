@@ -47,6 +47,14 @@ private:
     lv_obj_t *barRPM;
     lv_obj_t *fuelBar;
 
+    //Cells for the left and right data columns
+    lv_obj_t *_coolantCell;
+    lv_obj_t *_matCell;
+    lv_obj_t *_batteryCell;
+    lv_obj_t *_rpmCell;
+    lv_obj_t *_mapCell;
+    lv_obj_t *_afrCell;
+
     //Images
     lv_obj_t *tachometerImg;
     lv_obj_t *fuelImg;
@@ -62,7 +70,7 @@ private:
 
     lv_obj_t *_speedValueLabel;
     VehicleData *_localVehicleData = nullptr;
-    VehicleData previousVehicleData;
-    static void scale_label_format_cb(lv_event_t *e);
+       static void scale_label_format_cb(lv_event_t *e);
     static void ui_timer_cb(lv_timer_t *timer);
+     void createCell(lv_obj_t *parent, const char *title, lv_obj_t **val_label, lv_obj_t **box_container);
 };

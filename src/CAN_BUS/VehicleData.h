@@ -26,4 +26,5 @@ public:
     CANDataField button1;
 
     VehicleData();
+    void updateValuesFrom(const VehicleData &source); // Preserve UI change-detection baselines.
 };
